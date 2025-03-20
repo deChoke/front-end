@@ -4,7 +4,7 @@ import { useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { ArrowRight, Calendar, Clock, MapPin } from "lucide-react"
+import { ArrowRight, Calendar, Clock, MapPin, Beer, PartyPopper } from "lucide-react"
 import ScrollAnimation from "@/components/scroll-animation"
 
 export default function Home() {
@@ -39,8 +39,6 @@ export default function Home() {
         </div>
 
         <div className="container mx-auto px-4 relative z-10 text-center">
-          
-
           <ScrollAnimation delay="1">
             <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">Jeugdhuis De Choke</h1>
           </ScrollAnimation>
@@ -52,7 +50,7 @@ export default function Home() {
           </ScrollAnimation>
         </div>
 
-        <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+        <div className="absolute bottom-10 left-0 right-0 flex justify-center items-center animate-bounce">
           <ArrowRight className="h-10 w-10 text-white rotate-90" />
         </div>
       </section>
@@ -86,7 +84,7 @@ export default function Home() {
               <ScrollAnimation delay="2">
                 <p className="text-gray-600 mb-6">
                   Jeugdhuis De Choke is dé ontmoetingsplek voor jongeren die op zoek zijn naar een plek om te relaxen,
-                  vrienden te ontmoeten en te genieten van geweldige events.
+                  vrienden te ontmoeten en te genieten van een gezellige sfeer.
                 </p>
               </ScrollAnimation>
 
@@ -169,7 +167,7 @@ export default function Home() {
                 </div>
                 <h3 className="text-xl font-bold text-gray-800 mb-4">Geweldige Events</h3>
                 <p className="text-gray-600">
-                  Van themafeesten tot live muziek, we organiseren regelmatig events die je niet wilt missen.
+                  Van thema-avonden tot live bandjes tot beerpongtoernooien, we organiseren allerlei evenementen die je niet wilt missen.
                 </p>
               </div>
             </ScrollAnimation>
@@ -177,30 +175,11 @@ export default function Home() {
             <ScrollAnimation delay="1">
               <div className="bg-white p-8 rounded-lg border border-gray-200 shadow-md h-full">
                 <div className="bg-primary/10 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-6">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="32"
-                    height="32"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="text-primary"
-                  >
-                    <path d="M8 22h8"></path>
-                    <path d="M7 10h10"></path>
-                    <path d="M10 2v8"></path>
-                    <path d="M14 2v8"></path>
-                    <path d="M17 6H7"></path>
-                    <path d="M12 10v4"></path>
-                    <path d="M7 14h10l-5 8z"></path>
-                  </svg>
+                <Beer className="h-8 w-8 text-primary"/>
                 </div>
                 <h3 className="text-xl font-bold text-gray-800 mb-4">Betaalbare Drankjes</h3>
                 <p className="text-gray-600">
-                  Geniet van je favoriete drankjes tegen vriendelijke prijzen in onze gezellige bar.
+                  Geniet van een breed assortiment aan studentvriendelijke prijzen.
                 </p>
               </div>
             </ScrollAnimation>
@@ -208,21 +187,7 @@ export default function Home() {
             <ScrollAnimation delay="2">
               <div className="bg-white p-8 rounded-lg border border-gray-200 shadow-md h-full">
                 <div className="bg-primary/10 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-6">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="32"
-                    height="32"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="text-primary"
-                  >
-                    <path d="M17 11l-5-5-5 5"></path>
-                    <path d="M17 18l-5-5-5 5"></path>
-                  </svg>
+                  <PartyPopper className="h-8 w-8 text-primary"/>
                 </div>
                 <h3 className="text-xl font-bold text-gray-800 mb-4">Toffe Sfeer</h3>
                 <p className="text-gray-600">

@@ -13,17 +13,21 @@ const Navbar = () => {
   const pathname = usePathname()
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 10) {
-        setScrolled(true)
-      } else {
-        setScrolled(false)
+    if (pathname === "/") {
+      const handleScroll = () => {
+        if (window.scrollY > 10) {
+          setScrolled(true)
+        } else {
+          setScrolled(false)
+        }
       }
-    }
 
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+      window.addEventListener("scroll", handleScroll)
+      return () => window.removeEventListener("scroll", handleScroll)
+    } else {
+      setScrolled(true)
+    }
+  }, [pathname])
 
   const toggleMenu = () => {
     setIsOpen(!isOpen)

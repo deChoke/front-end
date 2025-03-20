@@ -98,7 +98,7 @@ export default function EventsPage() {
             <h1 className="text-4xl md:text-6xl font-bold text-gray-800 text-center mb-6">Upcoming Events</h1>
           </ScrollAnimation>
           <ScrollAnimation delay="1">
-            <p className="text-xl text-gray-600 text-center max-w-2xl mx-auto mb-12">
+            <p className="text-xl text-gray-600 text-center max-w-2xl mx-auto">
               Ontdek alle komende events bij Jeugdhuis De Choke en mis niets van de actie!
             </p>
           </ScrollAnimation>
@@ -106,7 +106,7 @@ export default function EventsPage() {
       </section>
 
       {/* Events Grid */}
-      <section className="py-20 bg-white">
+      <section className="py-10 bg-white">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {events.map((event, index) => (
