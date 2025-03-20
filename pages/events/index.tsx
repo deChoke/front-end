@@ -39,6 +39,12 @@ export default function EventsPage() {
     fetchEvents()
   }, [])
 
+  function truncateDescription(description: string, maxLength: number) {
+    if (description.length <= maxLength) return description;
+    const truncated = description.slice(0, maxLength);
+    return truncated.slice(0, truncated.lastIndexOf(" ")) + "...";
+  }
+
   return (
     <>
       <section className="relative pt-32 bg-white">
@@ -72,7 +78,10 @@ export default function EventsPage() {
               {events.length > 0 ? (
                 events.map((event, index) => (
                   <ScrollAnimation key={event.id} delay={String(((index % 3) + 1)) as "1" | "2" | "3"}>
-                    <EventCard {...event} />
+                    <EventCard 
+                      {...event} 
+                      description={truncateDescription(event.description, 112)} 
+                    />
                   </ScrollAnimation>
                 ))
               ) : (
