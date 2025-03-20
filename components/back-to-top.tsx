@@ -3,15 +3,15 @@ import { ChevronUp } from 'lucide-react';
 
 const BackToTop = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const [isAtBottom, setIsAtBottom] = useState(false);
 
-  // Toon de knop alleen als we naar beneden hebben gescrolld
   useEffect(() => {
     const toggleVisibility = () => {
-      if (window.pageYOffset > 300) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
+      const scrolled = window.pageYOffset;
+      const windowHeight = window.innerHeight;
+      const fullHeight = document.documentElement.scrollHeight;
+      setIsVisible(scrolled > 300);
+      setIsAtBottom(scrolled + windowHeight >= fullHeight - 10);
     };
 
     window.addEventListener('scroll', toggleVisibility);
@@ -38,6 +38,7 @@ const BackToTop = () => {
         transition-all duration-300 ease-in-out
         hover:bg-[rgb(167,24,24)] hover:scale-110
         ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'}
+        ${isAtBottom ? 'mb-10' : 'mb-0'} // Verplaats de knop omhoog bij de bodem
       `}
       aria-label="Scroll naar boven"
     >
