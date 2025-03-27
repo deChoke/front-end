@@ -2,6 +2,8 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import ScrollAnimation from "@/components/scroll-animation";
 import Image from "next/image";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 
 export default function EventDetailPage() {
   const router = useRouter();
@@ -63,40 +65,54 @@ export default function EventDetailPage() {
   }
 
   return (
-    <section className="pt-24 pb-16 bg-gray-50">
-      <div className="container mx-auto px-6 lg:px-20">
-        <ScrollAnimation>
-          <h1 className="text-4xl md:text-5xl font-extrabold text-gray-800 text-center mb-8">
-            {event.title}
-          </h1>
-        </ScrollAnimation>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div className="flex justify-center">
-            <ScrollAnimation delay="1">
-              <Image 
-                src={event.image} 
-                alt={event.title} 
-                width={600} 
-                height={400} 
-                className="rounded-lg shadow-lg"
-              />
-            </ScrollAnimation>
-          </div>
-          <div>
-            <ScrollAnimation delay="2">
-              <p className="text-lg md:text-xl text-gray-600 leading-relaxed mb-6">
-                {event.description}
-              </p>
-            </ScrollAnimation>
-            <ScrollAnimation delay="3">
-              <p className="text-md md:text-lg text-gray-500">
-                <strong>Datum:</strong> {event.date} <br />
-                <strong>Tijd:</strong> {event.time}
-              </p>
-            </ScrollAnimation>
-          </div>
+    <div className="flex flex-col min-h-screen">
+      <main className="flex-grow relative">
+        <div className="absolute top-16 left-6 z-10">
+          
         </div>
-      </div>
-    </section>
+        <section className="pt-24 pb-16 bg-gray-50">
+        <Link
+            href="/events"
+            className="inline-flex items-center bg-primary text-white ml-5 mb-5 px-4 py-2 rounded-lg hover:bg-primary/80 transition"
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Terug
+          </Link>
+          <div className="container mx-auto px-6 lg:px-20">
+            <ScrollAnimation>
+              <h1 className="text-4xl md:text-5xl font-extrabold text-gray-800 text-center mb-8">
+                {event.title}
+              </h1>
+            </ScrollAnimation>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div className="flex justify-center">
+                <ScrollAnimation delay="1">
+                  <Image 
+                    src={event.image} 
+                    alt={event.title} 
+                    width={600} 
+                    height={400} 
+                    className="rounded-lg shadow-lg"
+                  />
+                </ScrollAnimation>
+              </div>
+              <div>
+                <ScrollAnimation delay="2">
+                  <p className="text-lg md:text-xl text-gray-600 leading-relaxed mb-6">
+                    {event.description}
+                  </p>
+                </ScrollAnimation>
+                <ScrollAnimation delay="3">
+                  <p className="text-md md:text-lg text-gray-500">
+                    <strong>Datum:</strong> {event.date} <br />
+                    <strong>Tijd:</strong> {event.time}
+                  </p>
+                </ScrollAnimation>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
   );
 }
