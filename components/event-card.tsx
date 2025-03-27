@@ -21,11 +21,11 @@ const EventCard = ({ id, title, date, time, image, description }: EventCardProps
       <div className="p-6 flex-1 flex flex-col">
         <h3 className="text-2xl font-bold mb-2 text-gray-800">{title}</h3>
         <div className="flex items-center text-gray-500 mb-2">
-          <Calendar className="h-4 w-4 mr-2" />
+          <Calendar className="h-4 w-4 mr-2 text-primary"/>
           <span>{date}</span>
         </div>
         <div className="flex items-center text-gray-500 mb-2">
-          <Clock className="h-4 w-4 mr-2" />
+          <Clock className="h-4 w-4 mr-2 text-primary" />
           <span>{time}</span>
         </div>
         <p className="text-gray-600 mb-6 flex-1">{description}</p>

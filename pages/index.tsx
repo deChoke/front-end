@@ -122,12 +122,6 @@ export default function Home() {
               </ScrollAnimation>
 
               <ScrollAnimation delay="3">
-                <p className="text-gray-600 mb-8">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                </p>
-              </ScrollAnimation>
-
-              <ScrollAnimation delay="3">
                 <Button asChild className="bg-primary hover:bg-primary/80">
                   <Link href="/events">Ontdek Onze Evenementen</Link>
                 </Button>
@@ -140,7 +134,7 @@ export default function Home() {
       <section id="next-event" className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <ScrollAnimation>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 text-center mb-12">Ons Volgende Event</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 text-center mb-12">Volgende Evenement</h2>
           </ScrollAnimation>
 
           {nextEvent ? (
@@ -170,11 +164,9 @@ export default function Home() {
                   </div>
                 </ScrollAnimation>
 
-                <ScrollAnimation delay="2">
-                  <p className="text-gray-600 mb-8">{nextEvent.description}</p>
-                </ScrollAnimation>
+               
 
-                <ScrollAnimation delay="3">
+                <ScrollAnimation delay="2">
                   <Button asChild className="bg-primary hover:bg-primary/80">
                     <Link href={`/events/${nextEvent.id}`}>Meer Info</Link>
                   </Button>
@@ -182,7 +174,7 @@ export default function Home() {
               </div>
             </div>
           ) : (
-            <p className="text-center text-gray-600">Geen toekomstige evenementen gevonden.</p>
+            <p className="text-center text-gray-600">Kom wat later terug om ons volgend evenementen te checken</p>
           )}
         </div>
       </section>
@@ -200,9 +192,9 @@ export default function Home() {
                 <div className="bg-primary/10 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-6">
                   <Calendar className="h-8 w-8 text-primary" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-800 mb-4">Geweldige Events</h3>
+                <h3 className="text-xl font-bold text-gray-800 mb-4">Geweldige Evenementen</h3>
                 <p className="text-gray-600">
-                  Van thema-avonden tot live bandjes tot beerpongtoernooien, we organiseren allerlei evenementen die je niet wilt missen.
+                Van thema-avonden tot uitdagende toernooien en live optredens: wij organiseren allerlei onvergetelijke avonden die je niet wilt missen.
                 </p>
               </div>
             </ScrollAnimation>
@@ -214,7 +206,7 @@ export default function Home() {
                 </div>
                 <h3 className="text-xl font-bold text-gray-800 mb-4">Betaalbare Drankjes</h3>
                 <p className="text-gray-600">
-                  Geniet van een breed assortiment aan studentvriendelijke prijzen.
+                  Geniet van een breed assortiment aan studentvriendelijke prijzen. Want ja, wie betaalt er nu graag meer dan nodig?
                 </p>
               </div>
             </ScrollAnimation>

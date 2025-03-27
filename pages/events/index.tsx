@@ -2,9 +2,21 @@ import { useEffect, useState } from "react"
 import ScrollAnimation from "@/components/scroll-animation"
 import EventCard from "@/components/event-card"
 import Image from "next/image"
+import Link from "next/link"
 
 export default function EventsPage() {
-  const [events, setEvents] = useState([])
+  interface Event {
+    id: string;
+    date: string;
+    description: string;
+    [key: string]: any; // For any additional properties
+  }
+
+  interface ParsedEvent extends Event {
+    parsedDate: Date;
+  }
+
+  const [events, setEvents] = useState<ParsedEvent[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -23,10 +35,21 @@ export default function EventsPage() {
         }
   
         // Filter evenementen met een datum in de toekomst
-        const upcomingEvents = data
-        .map(event => ({ ...event, parsedDate: parseEuropeanDate(event.date) })) // Voeg geparste datum toe
-        .filter(event => event.parsedDate.setHours(0, 0, 0, 0) >= today) // Filter op datum
-        .sort((a, b) => a.parsedDate.getTime() - b.parsedDate.getTime()) // Sorteer op datum
+        interface Event {
+          id: string;
+          date: string;
+          description: string;
+          [key: string]: any; // For any additional properties
+        }
+
+        interface ParsedEvent extends Event {
+          parsedDate: Date;
+        }
+
+        const upcomingEvents: ParsedEvent[] = data
+          .map((event: Event): ParsedEvent => ({ ...event, parsedDate: parseEuropeanDate(event.date) })) // Voeg geparste datum toe
+          .filter((event: ParsedEvent) => event.parsedDate.setHours(0, 0, 0, 0) >= today) // Filter op datum
+          .sort((a: ParsedEvent, b: ParsedEvent) => a.parsedDate.getTime() - b.parsedDate.getTime()) // Sorteer op datum
   
         setEvents(upcomingEvents)
       } catch (error) {
@@ -51,11 +74,11 @@ export default function EventsPage() {
         <div className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-primary/10 to-white/0 opacity-70"></div>
         <div className="container mx-auto px-4 relative z-10">
           <ScrollAnimation>
-            <h1 className="text-4xl md:text-6xl font-bold text-gray-800 text-center mb-6">Upcoming Events</h1>
+            <h1 className="text-4xl md:text-6xl font-bold text-gray-800 text-center mb-6">Toekomstige evenementen</h1>
           </ScrollAnimation>
           <ScrollAnimation delay="1">
             <p className="text-xl text-gray-600 text-center max-w-2xl mx-auto mb-12">
-              Ontdek al onze komende events bij Jeugdhuis De Choke en mis niets van de actie!
+              Ontdek al onze komende evenementen en mis niets van de actie!
             </p>
           </ScrollAnimation>
         </div>
@@ -80,6 +103,9 @@ export default function EventsPage() {
                   <ScrollAnimation key={event.id} delay={String(((index % 3) + 1)) as "1" | "2" | "3"}>
                     <EventCard 
                       {...event} 
+                      title={event.title || "No Title"} 
+                      time={event.time || "No Time"} 
+                      image={event.image || "/images/default.png"} 
                       description={truncateDescription(event.description, 112)} 
                     />
                   </ScrollAnimation>
