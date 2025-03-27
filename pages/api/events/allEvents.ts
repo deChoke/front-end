@@ -1,13 +1,15 @@
+import { url } from "inspector"
 import type { NextApiRequest, NextApiResponse } from "next"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const PAGE_ID = process.env.FACEBOOK_EVENTS_ID
   const ACCESS_TOKEN = process.env.FACEBOOK_ACCESS_TOKEN
 
-  const url = `https://graph.facebook.com/v19.0/${PAGE_ID}/events?fields=id,name,description,start_time,cover&access_token=${ACCESS_TOKEN}`
+  const urlAllEvents = `https://graph.facebook.com/v22.0/${PAGE_ID}/events?fields=id,name,description,start_time,cover&access_token=${ACCESS_TOKEN}`
+  
 
   try {
-    const response = await fetch(url)
+    const response = await fetch(urlAllEvents)
     const data = await response.json()
 
     if (data.error) {

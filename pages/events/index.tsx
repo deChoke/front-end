@@ -22,7 +22,7 @@ export default function EventsPage() {
   useEffect(() => {
     async function fetchEvents() {
       try {
-        const response = await fetch("/api/events")
+        const response = await fetch("/api//events/allEvents")
         const data = await response.json()
   
         // Huidige datum verkrijgen zonder tijd

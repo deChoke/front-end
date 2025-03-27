@@ -21,7 +21,7 @@ export default function Home() {
   useEffect(() => {
     async function fetchNextEvent() {
       try {
-        const response = await fetch("/api/events")
+        const response = await fetch("/api/events/allEvents")
         const data: Event[] = await response.json()
   
         const today = new Date().setHours(0, 0, 0, 0)
