@@ -48,7 +48,7 @@ const Navbar = () => {
 
   const navLinks = [
     { href: "/", label: "Home" },
-    { href: "/events", label: "Events" },
+    { href: "/events", label: "Evenementen" },
     { href: "/photos", label: "Foto's" },
   ]
 
@@ -107,24 +107,11 @@ const Navbar = () => {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden relative z-[101] flex flex-col justify-center items-center mr-5 w-10 h-10"
+            className="md:hidden relative z-[101] flex items-center justify-center mr-5 w-10 h-10"
             onClick={toggleMenu}
-            aria-label={isOpen ? "Close menu" : "Open menu"}
+            aria-label="Open menu"
           >
-            <div className={cn("hamburger-menu relative w-8 h-6", isOpen && "open")}>
-              <span className={cn(
-                "absolute w-8 h-1 bg-white transition-all duration-300",
-                isOpen ? "rotate-45 top-2.5" : "top-0"
-              )} />
-              <span className={cn(
-                "absolute w-8 h-1 bg-white top-2.5 transition-all duration-300",
-                isOpen ? "opacity-0" : "opacity-100"
-              )} />
-              <span className={cn(
-                "absolute w-8 h-1 bg-white transition-all duration-300",
-                isOpen ? "-rotate-45 top-2.5" : "top-5"
-              )} />
-            </div>
+            <Menu className="w-8 h-8 text-white" />
           </button>
         </div>
       </header>
@@ -136,6 +123,13 @@ const Navbar = () => {
           isOpen ? "translate-x-0" : "translate-x-full"
         )}
       >
+        <button
+          onClick={closeMenu}
+          className="absolute top-4 right-4 p-2 text-white hover:text-white/80 transition-colors"
+          aria-label="Close menu"
+        >
+          <X className="w-8 h-8" />
+        </button>
         <div className="flex flex-col h-full pt-20">
           {navLinks.map((link) => (
             <Link
