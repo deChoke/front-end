@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import ScrollAnimation from "@/components/scroll-animation";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Calendar, Clock } from "lucide-react";
 
 export default function EventDetailPage() {
   const router = useRouter();
@@ -24,7 +24,7 @@ export default function EventDetailPage() {
     if (id && typeof id === "string") {
       async function fetchEvent() {
         try {
-          console.log("Fetching event:", `/api/events/${id}`); // Correct API route
+          console.log("Fetching event:", `/api/events/${id}`); 
           const response = await fetch(`/api/events/${id}`);
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -73,7 +73,7 @@ export default function EventDetailPage() {
         <section className="pt-24 pb-16 bg-gray-50">
         <Link
             href="/events"
-            className="inline-flex items-center bg-primary text-white ml-5 mb-5 px-4 py-2 rounded-lg hover:bg-primary/80 transition"
+            className="inline-flex items-center bg-primary text-white ml-5 mb-6 px-4 py-2 rounded-lg hover:bg-primary/80 transition"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Terug
@@ -96,16 +96,22 @@ export default function EventDetailPage() {
                   />
                 </ScrollAnimation>
               </div>
-              <div>
-                <ScrollAnimation delay="2">
+              <div className="flex flex-col">
+                <ScrollAnimation delay="2" className="order-2 lg:order-1">
                   <p className="text-lg md:text-xl text-gray-600 leading-relaxed mb-6">
                     {event.description}
                   </p>
                 </ScrollAnimation>
-                <ScrollAnimation delay="3">
-                  <p className="text-md md:text-lg text-gray-500">
-                    <strong>Datum:</strong> {event.date} <br />
-                    <strong>Tijd:</strong> {event.time}
+                <ScrollAnimation delay="3" className="order-1 lg:order-2">
+                  <p className="text-md mb-5 md:text-lg text-gray-500">
+                    <div className="flex items-center text-gray-500 mb-2">
+                      <Calendar className="h-5 w-5 mr-2 text-primary"/>
+                      <span>{event.date}</span>
+                    </div>
+                    <div className="flex items-center text-gray-500 mb-2">
+                      <Clock className="h-5 w-5 mr-2 text-primary" />
+                      <span>{event.time}</span>
+                    </div>
                   </p>
                 </ScrollAnimation>
               </div>

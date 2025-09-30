@@ -140,9 +140,16 @@ export default function Home() {
           {nextEvent ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
               <ScrollAnimation>
-                <div className="relative h-[400px] rounded-lg overflow-hidden shadow-xl">
-                  <Image src={nextEvent.image} alt={nextEvent.title} fill className="object-cover" />
-                </div>
+                <Link href={`/events/${nextEvent.id}`} className="block">
+                  <div className="relative h-[250px] md:h-[400px] rounded-lg overflow-hidden shadow-xl transform transition-transform duration-300 hover:scale-[1.02]">
+                    <Image 
+                      src={nextEvent.image} 
+                      alt={nextEvent.title} 
+                      fill 
+                      quality={100}
+                    />
+                  </div>
+                </Link>
               </ScrollAnimation>
 
               <div>

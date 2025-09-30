@@ -20,7 +20,7 @@ export default function AlbumDetailPage() {
     async function fetchPhotos() {
       setLoading(true)
       try {
-        const response = await fetch(`/api/photos?album=${albumId}`)
+        const response = await fetch(`/api/photos?albumId=${albumId}`)
         const data = await response.json()
         setPhotos(data.photos)
       } catch (error) {
@@ -35,10 +35,7 @@ export default function AlbumDetailPage() {
 
   return (
     <div className="container mx-auto px-4 py-10">
-      <Link href="/photos" legacyBehavior>
-        <a className="mb-4 inline-block text-primary hover:underline">&larr; Terug naar albums</a>
-      </Link>
-      <h1 className="text-4xl font-bold text-center mb-10">Foto's van 20 jaar Choke</h1>
+      <h1 className="text-4xl font-bold text-center my-10">Foto's van 20 jaar Choke</h1>
       {loading ? (
         <p className="text-center">Laden...</p>
       ) : Array.isArray(photos) && photos.length > 0 ? (

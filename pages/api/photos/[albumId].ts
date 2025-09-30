@@ -15,7 +15,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
   
     try {
-      const url = `https://graph.facebook.com/v19.0/${ALBUM_ID}/photos?fields=id,images,created_time&access_token=${ACCESS_TOKEN}`
+      const url = `https://graph.facebook.com/v22.0/${ALBUM_ID}/photos?fields=id,images,created_time&access_token=${ACCESS_TOKEN}`
       const response = await fetch(url)
       const data = await response.json()
   
