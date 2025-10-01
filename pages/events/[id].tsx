@@ -84,7 +84,7 @@ export default function EventDetailPage() {
                 {event.title}
               </h1>
             </ScrollAnimation>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
               <div className="flex justify-center">
                 <ScrollAnimation delay="1">
                   <Image 
@@ -99,7 +99,16 @@ export default function EventDetailPage() {
               <div className="flex flex-col">
                 <ScrollAnimation delay="2" className="order-2 lg:order-1">
                   <p className="text-lg md:text-xl text-gray-600 leading-relaxed mb-6">
-                    {event.description}
+                    <span
+                      dangerouslySetInnerHTML={{
+                        __html: event.description
+                          .replace(/\n/g, '<br />')
+                          .replace(
+                            /(https?:\/\/[^\s]+)/g,
+                            '<a href="$1" target="_blank" rel="noopener noreferrer" class="text-blue-500 underline">$1</a>'
+                          ),
+                      }}
+                    />
                   </p>
                 </ScrollAnimation>
                 <ScrollAnimation delay="3" className="order-1 lg:order-2">
