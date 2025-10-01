@@ -1,15 +1,49 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, Calendar, Clock, MapPin, Beer, PartyPopper } from "lucide-react"
 import ScrollAnimation from "@/components/scroll-animation"
 
+interface Event {
+  id: string
+  title: string
+  date: string // DD-MM-YYYY formaat
+  time: string
+  description: string
+  image: string
+}
+
 export default function Home() {
-  // Initialize scroll animations
+  const [nextEvent, setNextEvent] = useState<Event | null>(null)
   useEffect(() => {
+    async function fetchNextEvent() {
+      try {
+        const response = await fetch("/api/events/allEvents")
+        const data: Event[] = await response.json()
+  
+        const today = new Date().setHours(0, 0, 0, 0)
+  
+        const parseEuropeanDate = (dateStr: string) => {
+          const [day, month, year] = dateStr.split("/").map(Number)
+          return new Date(year, month - 1, day)
+        }
+  
+        const upcomingEvents = data
+          .map(event => ({ ...event, parsedDate: parseEuropeanDate(event.date) }))
+          .filter(event => event.parsedDate.setHours(0, 0, 0, 0) >= today)
+          .sort((a, b) => a.parsedDate.getTime() - b.parsedDate.getTime())
+  
+        if (upcomingEvents.length > 0) {
+          setNextEvent(upcomingEvents[0])
+        }
+      } catch (error) {
+        console.error("Fout bij ophalen van het volgende event:", error)
+      }
+    }
+  
     const animateElements = () => {
       const elements = document.querySelectorAll(".animate-on-scroll")
       elements.forEach((element) => {
@@ -20,11 +54,10 @@ export default function Home() {
         }
       })
     }
-
-    // Run once on load
-    animateElements()
-
-    // Add scroll event listener
+  
+    fetchNextEvent() // Haal het volgende event op
+    animateElements() // Start de animatiecontrole
+  
     window.addEventListener("scroll", animateElements)
     return () => window.removeEventListener("scroll", animateElements)
   }, [])
@@ -89,12 +122,6 @@ export default function Home() {
               </ScrollAnimation>
 
               <ScrollAnimation delay="3">
-                <p className="text-gray-600 mb-8">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                </p>
-              </ScrollAnimation>
-
-              <ScrollAnimation delay="3">
                 <Button asChild className="bg-primary hover:bg-primary/80">
                   <Link href="/events">Ontdek Onze Evenementen</Link>
                 </Button>
@@ -107,48 +134,55 @@ export default function Home() {
       <section id="next-event" className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <ScrollAnimation>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 text-center mb-12">Ons Volgende Event</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 text-center mb-12">Volgende Evenement</h2>
           </ScrollAnimation>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-            <ScrollAnimation>
-              <div className="relative h-[400px] rounded-lg overflow-hidden shadow-xl">
-                <Image src="/images/choke-saloon.png" alt="Foto volgend event" fill className="object-cover" />
-              </div>
-            </ScrollAnimation>
-
-            <div>
+          {nextEvent ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
               <ScrollAnimation>
-                <h3 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4">[volgend event]</h3>
+                <Link href={`/events/${nextEvent.id}`} className="block">
+                  <div className="relative h-[250px] md:h-[400px] rounded-lg overflow-hidden shadow-xl transform transition-transform duration-300 hover:scale-[1.02]">
+                    <Image 
+                      src={nextEvent.image} 
+                      alt={nextEvent.title} 
+                      fill 
+                      quality={100}
+                    />
+                  </div>
+                </Link>
               </ScrollAnimation>
 
-              <ScrollAnimation delay="1">
-                <div className="flex items-center text-gray-600 mb-2">
-                  <Calendar className="h-5 w-5 mr-2 text-primary" />
-                  <span>29 juni 2024</span>
-                </div>
-              </ScrollAnimation>
+              <div>
+                <ScrollAnimation>
+                  <h3 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4">{nextEvent.title}</h3>
+                </ScrollAnimation>
 
-              <ScrollAnimation delay="1">
-                <div className="flex items-center text-gray-600 mb-2">
-                  <Clock className="h-5 w-5 mr-2 text-primary" />
-                  <span>20:00 - 02:00</span>
-                </div>
-              </ScrollAnimation>
+                <ScrollAnimation delay="1">
+                  <div className="flex items-center text-gray-600 mb-2">
+                    <Calendar className="h-5 w-5 mr-2 text-primary" />
+                    <span>{nextEvent.date}</span>
+                  </div>
+                </ScrollAnimation>
 
-              <ScrollAnimation delay="2">
-                <p className="text-gray-600 mb-8">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam repudiandae molestiae similique illum cupiditate ab laboriosam eaque saepe excepturi iste et pariatur est, debitis cum, ad aperiam accusantium. At doloremque ad aliquid eveniet laudantium quasi esse nemo explicabo ea? Eius alias omnis, fugiat placeat sit obcaecati similique veniam delectus expedita.
-                </p>
-              </ScrollAnimation>
+                <ScrollAnimation delay="1">
+                  <div className="flex items-center text-gray-600 mb-2">
+                    <Clock className="h-5 w-5 mr-2 text-primary" />
+                    <span>{nextEvent.time}</span>
+                  </div>
+                </ScrollAnimation>
 
-              <ScrollAnimation delay="3">
-                <Button asChild className="bg-primary hover:bg-primary/80">
-                  <Link href="/events/[id]">Meer Info</Link>
-                </Button>
-              </ScrollAnimation>
+               
+
+                <ScrollAnimation delay="2">
+                  <Button asChild className="bg-primary hover:bg-primary/80">
+                    <Link href={`/events/${nextEvent.id}`}>Meer Info</Link>
+                  </Button>
+                </ScrollAnimation>
+              </div>
             </div>
-          </div>
+          ) : (
+            <p className="text-center text-gray-600">Kom wat later terug om ons volgend evenementen te checken</p>
+          )}
         </div>
       </section>
 
@@ -165,9 +199,9 @@ export default function Home() {
                 <div className="bg-primary/10 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-6">
                   <Calendar className="h-8 w-8 text-primary" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-800 mb-4">Geweldige Events</h3>
+                <h3 className="text-xl font-bold text-gray-800 mb-4">Geweldige Evenementen</h3>
                 <p className="text-gray-600">
-                  Van thema-avonden tot live bandjes tot beerpongtoernooien, we organiseren allerlei evenementen die je niet wilt missen.
+                Van thema-avonden tot uitdagende toernooien en live optredens: wij organiseren allerlei onvergetelijke avonden die je niet wilt missen.
                 </p>
               </div>
             </ScrollAnimation>
@@ -179,7 +213,7 @@ export default function Home() {
                 </div>
                 <h3 className="text-xl font-bold text-gray-800 mb-4">Betaalbare Drankjes</h3>
                 <p className="text-gray-600">
-                  Geniet van een breed assortiment aan studentvriendelijke prijzen.
+                  Geniet van een breed assortiment aan studentvriendelijke prijzen. Want ja, wie betaalt er nu graag meer dan nodig?
                 </p>
               </div>
             </ScrollAnimation>
