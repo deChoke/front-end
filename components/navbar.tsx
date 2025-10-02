@@ -49,7 +49,7 @@ const Navbar = () => {
   const navLinks = [
     { href: "/", label: "Home" },
     { href: "/events", label: "Evenementen" },
-    { href: "/photos", label: "Foto's" },
+    { href: "/contact", label: "Contact" },
   ]
 
   return (

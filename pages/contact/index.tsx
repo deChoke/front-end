@@ -47,11 +47,11 @@ const Contact = () => {
   }
 
   return (
-    <div className="max-w-lg mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Contact</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="max-w-lg mx-auto p-4 bg-white shadow-lg rounded-lg border border-gray-200">
+      <h1 className="text-3xl font-extrabold text-center text-gray-800 mb-6">Neem Contact Op</h1>
+      <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <label htmlFor="firstName" className="block text-sm font-medium">
+          <label htmlFor="firstName" className="block text-sm font-semibold text-gray-700">
             Voornaam: <span className="text-red-500">*</span>
           </label>
           <input
@@ -61,11 +61,11 @@ const Contact = () => {
             value={formData.firstName}
             onChange={handleChange}
             required
-            className="w-full border border-gray-300 rounded p-2"
+            className="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
         </div>
         <div>
-          <label htmlFor="lastName" className="block text-sm font-medium">
+          <label htmlFor="lastName" className="block text-sm font-semibold text-gray-700">
             Naam: <span className="text-red-500">*</span>
           </label>
           <input
@@ -75,11 +75,11 @@ const Contact = () => {
             value={formData.lastName}
             onChange={handleChange}
             required
-            className="w-full border border-gray-300 rounded p-2"
+            className="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
         </div>
         <div>
-          <label htmlFor="email" className="block text-sm font-medium">
+          <label htmlFor="email" className="block text-sm font-semibold text-gray-700">
             Email: <span className="text-red-500">*</span>
           </label>
           <input
@@ -89,11 +89,11 @@ const Contact = () => {
             value={formData.email}
             onChange={handleChange}
             required
-            className="w-full border border-gray-300 rounded p-2"
+            className="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
         </div>
         <div>
-          <label htmlFor="phone" className="block text-sm font-medium">
+          <label htmlFor="phone" className="block text-sm font-semibold text-gray-700">
             Telefoonnummer (optioneel):
           </label>
           <input
@@ -102,11 +102,11 @@ const Contact = () => {
             name="phone"
             value={formData.phone}
             onChange={handleChange}
-            className="w-full border border-gray-300 rounded p-2"
+            className="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
         </div>
         <div>
-          <label htmlFor="message" className="block text-sm font-medium">
+          <label htmlFor="message" className="block text-sm font-semibold text-gray-700">
             Bericht: <span className="text-red-500">*</span>
           </label>
           <textarea
@@ -116,12 +116,12 @@ const Contact = () => {
             onChange={handleChange}
             rows={5}
             required
-            className="w-full border border-gray-300 rounded p-2"
+            className="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
           ></textarea>
         </div>
         <button
           type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          className="w-full py-3 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 focus:outline-none"
         >
           Verzenden
         </button>
