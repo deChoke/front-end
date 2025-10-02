@@ -54,6 +54,25 @@ export default function Home() {
         }
       })
     }
+
+    const mapsLink = document.getElementById("maps-link");
+
+    if (mapsLink) {
+      mapsLink.style.cursor = "pointer"; 
+      mapsLink.addEventListener("click", () => {
+        window.open("https://maps.app.goo.gl/VmSYuuNNtyq82XWg7", "_blank");
+      });
+
+      mapsLink.addEventListener("mouseover", () => {
+        mapsLink.style.textDecoration = "underline";
+        mapsLink.style.color = "rgb(147,4,4)";
+      });
+
+      mapsLink.addEventListener("mouseout", () => {
+        mapsLink.style.textDecoration = "none";
+        mapsLink.style.color = "inherit";
+      });
+    }
   
     fetchNextEvent() // Haal het volgende event op
     animateElements() // Start de animatiecontrole
@@ -110,13 +129,13 @@ export default function Home() {
               <ScrollAnimation delay="1">
                 <div className="flex items-center text-gray-600 mb-6">
                   <MapPin className="h-5 w-5 mr-2 text-primary" />
-                  <span>Asbroek 2, 2230 Herselt</span>
+                  <span id="maps-link">Asbroek 2, 2230 Herselt</span>
                 </div>
               </ScrollAnimation>
 
               <ScrollAnimation delay="2">
                 <p className="text-gray-600 mb-6">
-                  Jeugdhuis De Choke is dé ontmoetingsplek voor jongeren die op zoek zijn naar een plek om te relaxen,
+                  Jeugdhuis De Choke is de ontmoetingsplek voor jongeren die op zoek zijn naar een plek om te relaxen,
                   vrienden te ontmoeten en te genieten van een gezellige sfeer.
                 </p>
               </ScrollAnimation>
