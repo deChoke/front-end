@@ -10,16 +10,59 @@ const Contact = () => {
     message: "",
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [errors, setErrors] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    message: "",
+    submit: ""
+  });
+
+  const validationRules = {
+    firstName: (value: string) => value.length >= 50 ? "Maximum 50 karakters toegestaan" : "",
+    lastName: (value: string) => value.length >= 50 ? "Maximum 50 karakters toegestaan" : "",
+    email: (value: string) => {
+      if (value.length >= 100) return "Maximum 100 karakters toegestaan";
+      if (value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return "Voer een geldig e-mailadres in";
+      return "";
+    },
+    phone: (value: string) => value && !/^[0-9+\-\s()]*$/.test(value) ? "Voer een geldig telefoonnummer in" : "",
+    message: (value: string) => value.length >= 750 ? "Maximum 750 karakters toegestaan" : "",
+  };
+
+  const validateField = (name: string, value: string) => {
+    return validationRules[name as keyof typeof validationRules]?.(value) || "";
+  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    const error = validateField(name, value);
+    setErrors(prev => ({ ...prev, [name]: error }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Validate all fields before submission
+    const newErrors = {
+      firstName: validateField("firstName", formData.firstName),
+      lastName: validateField("lastName", formData.lastName),
+      email: validateField("email", formData.email),
+      phone: validateField("phone", formData.phone),
+      message: validateField("message", formData.message),
+      submit: ""
+    };
+
+    setErrors(newErrors);
+
+    // Check if there are any errors
+    if (Object.values(newErrors).some(error => error !== "")) {
+      return;
+    }
 
     try {
       const response = await fetch("https://formspree.io/f/xjkaravr", {
@@ -28,10 +71,19 @@ const Contact = () => {
         body: JSON.stringify(formData),
       });
 
-      if (response.ok) setIsSubmitted(true);
-      else console.error("Form submission failed.");
+      if (response.ok) {
+        setIsSubmitted(true);
+      } else {
+        setErrors(prev => ({
+          ...prev,
+          submit: "Er is een fout opgetreden bij het verzenden van het formulier."
+        }));
+      }
     } catch (error) {
-      console.error("An error occurred:", error);
+      setErrors(prev => ({
+        ...prev,
+        submit: "Er is een fout opgetreden. Probeer het later opnieuw."
+      }));
     }
   };
 
@@ -42,7 +94,7 @@ const Contact = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
       >
-        <h1 className="text-3xl font-bold mb-3 text-blue-700">🎉 Bedankt!</h1>
+        <h1 className="text-3xl font-bold mb-3 text-blue-700">Bedankt!</h1>
         <p className="text-gray-700">
           Uw bericht is succesvol verzonden. We nemen snel contact met u op.
         </p>
@@ -51,12 +103,13 @@ const Contact = () => {
   }
 
   return (
-    <motion.div
-      className="max-w-2xl  mx-auto mt-20 mb-10 bg-white p-8 rounded-2xl shadow-xl border border-gray-100 sm:p-10"
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-    >
-      <h1 className="text-3xl sm:text-4xl font-extrabold text-center text-blue-700 mb-8">
+    <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <motion.div
+        className="max-w-2xl w-full bg-white p-8 rounded-2xl shadow-xl border border-gray-100 sm:p-10"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+      <h1 className="text-3xl sm:text-4xl font-extrabold text-center mb-8">
         Neem Contact Op
       </h1>
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -72,8 +125,14 @@ const Contact = () => {
               value={formData.firstName}
               onChange={handleChange}
               required
-              className="w-full mt-1 p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              maxLength={50}
+              className={`w-full mt-1 p-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none ${
+                errors.firstName ? 'border-red-500' : 'border-gray-300'
+              }`}
             />
+            {errors.firstName && (
+              <p className="mt-1 text-sm text-red-500">{errors.firstName}</p>
+            )}
           </div>
           <div>
             <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
@@ -86,6 +145,7 @@ const Contact = () => {
               value={formData.lastName}
               onChange={handleChange}
               required
+              maxLength={50}
               className="w-full mt-1 p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
           </div>
@@ -102,8 +162,14 @@ const Contact = () => {
             value={formData.email}
             onChange={handleChange}
             required
-            className="w-full mt-1 p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            maxLength={100}
+            className={`w-full mt-1 p-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none ${
+              errors.email ? 'border-red-500' : 'border-gray-300'
+            }`}
           />
+          {errors.email && (
+            <p className="mt-1 text-sm text-red-500">{errors.email}</p>
+          )}
         </div>
 
         <div>
@@ -116,8 +182,13 @@ const Contact = () => {
             name="phone"
             value={formData.phone}
             onChange={handleChange}
-            className="w-full mt-1 p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            className={`w-full mt-1 p-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none ${
+              errors.phone ? 'border-red-500' : 'border-gray-300'
+            }`}
           />
+          {errors.phone && (
+            <p className="mt-1 text-sm text-red-500">{errors.phone}</p>
+          )}
         </div>
 
         <div>
@@ -131,18 +202,29 @@ const Contact = () => {
             onChange={handleChange}
             rows={5}
             required
-            className="w-full mt-1 p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            maxLength={750}
+            className={`w-full mt-1 p-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none ${
+              errors.message ? 'border-red-500' : 'border-gray-300'
+            }`}
           ></textarea>
+          {errors.message && (
+            <p className="mt-1 text-sm text-red-500">{errors.message}</p>
+          )}
         </div>
+
+        {errors.submit && (
+          <p className="text-center text-red-500 mb-4">{errors.submit}</p>
+        )}
 
         <button
           type="submit"
-          className="w-full py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 transition duration-300"
+          className="w-full py-3 bg-primary text-white font-semibold rounded-xl hover:bg-primary/80 focus:ring-4 focus:ring-blue-300 transition duration-300"
         >
           Verzenden
         </button>
       </form>
     </motion.div>
+    </div>
   );
 };
 
