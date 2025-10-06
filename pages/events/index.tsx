@@ -70,8 +70,8 @@ export default function EventsPage() {
 
   return (
     <>
-      <section className="relative pt-32 bg-white">
-        <div className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-primary/10 to-white/0 opacity-70"></div>
+      <section className="relative pt-32 bg-gray-50">
+        <div className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-primary/10 to-gray-50/0 opacity-70"></div>
         <div className="container mx-auto px-4 relative z-10">
           <ScrollAnimation>
             <h1 className="text-4xl md:text-6xl font-bold text-gray-800 text-center mb-6">Toekomstige evenementen</h1>
@@ -84,7 +84,7 @@ export default function EventsPage() {
         </div>
       </section>
 
-      <section className="pb-20 bg-white">
+      <section className="pb-20 bg-gray-50">
         <div className="container mx-auto px-4">
           {loading ? (
             <div className="flex justify-center items-center h-64">
