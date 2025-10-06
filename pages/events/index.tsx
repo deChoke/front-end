@@ -19,11 +19,42 @@ export default function EventsPage() {
   const [events, setEvents] = useState<ParsedEvent[]>([])
   const [loading, setLoading] = useState(true)
 
+  // Function to process events data
+  const processEvents = (data: any[], today: number) => {
+    const parseEuropeanDate = (dateStr: string) => {
+      const [day, month, year] = dateStr.split("/").map(Number)
+      return new Date(year, month - 1, day)
+    }
+
+    const upcomingEvents: ParsedEvent[] = data
+      .map((event: Event): ParsedEvent => ({ ...event, parsedDate: parseEuropeanDate(event.date) }))
+      .filter((event: ParsedEvent) => event.parsedDate.setHours(0, 0, 0, 0) >= today)
+      .sort((a: ParsedEvent, b: ParsedEvent) => a.parsedDate.getTime() - b.parsedDate.getTime())
+
+    setEvents(upcomingEvents)
+  }
+
   useEffect(() => {
     async function fetchEvents() {
       try {
-        const response = await fetch("/api//events/allEvents")
+        // Check if we have cached events and if they're still valid (less than 10 minutes old)
+        const cachedData = localStorage.getItem('events');
+        const cacheTimestamp = localStorage.getItem('eventsTimestamp');
+        const now = new Date().getTime();
+        
+        if (cachedData && cacheTimestamp && (now - Number(cacheTimestamp)) < 600000) { // 600000ms = 10 minutes
+          const data = JSON.parse(cachedData);
+          const today = new Date().setHours(0, 0, 0, 0);
+          processEvents(data, today);
+          return;
+        }
+
+        const response = await fetch("/api/events/allEvents")
         const data = await response.json()
+        
+        // Cache the new data
+        localStorage.setItem('events', JSON.stringify(data));
+        localStorage.setItem('eventsTimestamp', now.toString());
   
         // Huidige datum verkrijgen zonder tijd
         const today = new Date().setHours(0, 0, 0, 0)
@@ -34,24 +65,7 @@ export default function EventsPage() {
           return new Date(year, month - 1, day) // Maand is 0-gebaseerd in JavaScript
         }
   
-        // Filter evenementen met een datum in de toekomst
-        interface Event {
-          id: string;
-          date: string;
-          description: string;
-          [key: string]: any; // For any additional properties
-        }
-
-        interface ParsedEvent extends Event {
-          parsedDate: Date;
-        }
-
-        const upcomingEvents: ParsedEvent[] = data
-          .map((event: Event): ParsedEvent => ({ ...event, parsedDate: parseEuropeanDate(event.date) })) // Voeg geparste datum toe
-          .filter((event: ParsedEvent) => event.parsedDate.setHours(0, 0, 0, 0) >= today) // Filter op datum
-          .sort((a: ParsedEvent, b: ParsedEvent) => a.parsedDate.getTime() - b.parsedDate.getTime()) // Sorteer op datum
-  
-        setEvents(upcomingEvents)
+        processEvents(data, today)
       } catch (error) {
         console.error("Fout bij ophalen van evenementen:", error)
       } finally {
