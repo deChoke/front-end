@@ -66,18 +66,25 @@ const Contact = () => {
     }
 
     try {
-      const response = await fetch("https://formspree.io/f/xjkaravr", {
+      const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
+      const data = await response.json();
+
       if (response.ok) {
         setIsSubmitted(true);
+      } else if (response.status === 429) {
+        setErrors(prev => ({
+          ...prev,
+          submit: "Te veel verzoeken. Probeer het over een uur opnieuw."
+        }));
       } else {
         setErrors(prev => ({
           ...prev,
-          submit: "Er is een fout opgetreden bij het verzenden van het formulier."
+          submit: data.error || "Er is een fout opgetreden bij het verzenden van het formulier."
         }));
       }
     } catch (error) {
