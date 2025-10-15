@@ -103,7 +103,7 @@ const Contact = () => {
     }
   };
 
-  if (isSubmitted) {
+  if (isSubmitted || errors.submit) {
     return (
       <div className="min-h-screen flex items-center justify-center py-12 md:py-24 px-4 sm:px-6 lg:px-8">
         <motion.div
@@ -111,24 +111,56 @@ const Contact = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <div className="w-16 h-16 bg-green-100 rounded-full mx-auto flex items-center justify-center mb-6">
-            <svg className="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-            </svg>
-          </div>
-          <h1 className="text-3xl font-bold mb-4 text-primary">Bedankt!</h1>
-          <p className="text-gray-600 mb-8">
-            Uw bericht is succesvol verzonden.
-          </p>
-          <Link
-            href="/"
-            className="inline-flex items-center justify-center px-6 py-3 bg-primary text-white font-semibold rounded-xl hover:bg-primary/80 focus:ring-4 focus:ring-blue-300 transition duration-300"
-          >
-            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-            </svg>
-            Terug naar Home
-          </Link>
+          {isSubmitted ? (
+            // Success state
+            <>
+              <div className="w-16 h-16 bg-green-100 rounded-full mx-auto flex items-center justify-center mb-6">
+                <svg className="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+              </div>
+              <h1 className="text-3xl font-bold mb-4 text-primary">Bedankt!</h1>
+              <p className="text-gray-600 mb-8">
+                Uw bericht is succesvol verzonden.
+              </p>
+              <Link
+                href="/"
+                className="inline-flex items-center justify-center px-6 py-3 bg-primary text-white font-semibold rounded-xl hover:bg-primary/80 focus:ring-4 focus:ring-blue-300 transition duration-300"
+              >
+                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                </svg>
+                Terug naar Home
+              </Link>
+            </>
+          ) : (
+            // Error state
+            <>
+              <div className="w-16 h-16 bg-red-100 rounded-full mx-auto flex items-center justify-center mb-6">
+                <svg className="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+              </div>
+              <h1 className="text-3xl font-bold mb-4 text-red-600">Onze Excuses</h1>
+              <p className="text-gray-600 mb-8">
+                {errors.submit || "Er is iets misgegaan bij het verzenden van uw bericht."}
+              </p>
+              <div className="space-y-4 sm:space-y-0 sm:space-x-4 flex flex-col sm:flex-row justify-center">
+                <button
+                  onClick={() => setErrors(prev => ({ ...prev, submit: "" }))}
+                  className="inline-flex items-center justify-center px-6 py-3 bg-gray-600 text-white font-semibold rounded-xl hover:bg-gray-700 focus:ring-4 focus:ring-gray-300 transition duration-300"
+                >
+                  Probeer opnieuw
+                </button>
+                <Link
+                  href="/"
+                  className="inline-flex items-center justify-center px-6 py-3 bg-primary text-white font-semibold rounded-xl hover:bg-primary/80 focus:ring-4 focus:ring-blue-300 transition duration-300"
+                >
+                  Terug naar Home
+                </Link>
+              </div>
+            </>
+          )}
         </motion.div>
       </div>
     );
