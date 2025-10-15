@@ -20,20 +20,28 @@ const Contact = () => {
     submit: ""
   });
 
-  const validationRules = {
+  // Validatie regels voor tijdens het typen (alleen lengte checks)
+  const liveValidationRules = {
     firstName: (value: string) => value.length >= 50 ? "Maximum 50 karakters toegestaan" : "",
     lastName: (value: string) => value.length >= 50 ? "Maximum 50 karakters toegestaan" : "",
-    email: (value: string) => {
-      if (value.length >= 100) return "Maximum 100 karakters toegestaan";
-      if (value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return "Voer een geldig e-mailadres in";
-      return "";
-    },
+    email: (value: string) => value.length >= 100 ? "Maximum 100 karakters toegestaan" : "",
     phone: (value: string) => value && !/^[0-9+\-\s()]*$/.test(value) ? "Voer een geldig telefoonnummer in" : "",
-    message: (value: string) => value.length >= 750 ? "Maximum 750 karakters toegestaan" : "",
+    message: (value: string) => value.length >= 1000 ? "Maximum 1000 karakters toegestaan" : "",
   };
 
-  const validateField = (name: string, value: string) => {
-    return validationRules[name as keyof typeof validationRules]?.(value) || "";
+  // Volledige validatie regels voor bij het submitten
+  const submitValidationRules = {
+    ...liveValidationRules,
+    email: (value: string) => {
+      if (value.length >= 100) return "Maximum 100 karakters toegestaan";
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return "Voer een geldig e-mailadres in";
+      return "";
+    },
+  };
+
+  const validateField = (name: string, value: string, isSubmit = false) => {
+    const rules = isSubmit ? submitValidationRules : liveValidationRules;
+    return rules[name as keyof typeof rules]?.(value) || "";
   };
 
   const handleChange = (
@@ -41,7 +49,7 @@ const Contact = () => {
   ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    const error = validateField(name, value);
+    const error = validateField(name, value, false); // Live validatie
     setErrors(prev => ({ ...prev, [name]: error }));
   };
 
@@ -50,11 +58,11 @@ const Contact = () => {
 
     // Validate all fields before submission
     const newErrors = {
-      firstName: validateField("firstName", formData.firstName),
-      lastName: validateField("lastName", formData.lastName),
-      email: validateField("email", formData.email),
-      phone: validateField("phone", formData.phone),
-      message: validateField("message", formData.message),
+      firstName: validateField("firstName", formData.firstName, true),
+      lastName: validateField("lastName", formData.lastName, true),
+      email: validateField("email", formData.email, true),
+      phone: validateField("phone", formData.phone, true),
+      message: validateField("message", formData.message, true),
       submit: ""
     };
 
@@ -97,7 +105,7 @@ const Contact = () => {
 
   if (isSubmitted) {
     return (
-      <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen flex items-center justify-center py-12 md:py-24 px-4 sm:px-6 lg:px-8">
         <motion.div
           className="max-w-lg w-full bg-white p-8 rounded-2xl shadow-xl border border-gray-100 text-center"
           initial={{ opacity: 0, y: 30 }}
@@ -127,7 +135,7 @@ const Contact = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center py-12 md:py-24 px-4 sm:px-6 lg:px-8">
       <motion.div
         className="max-w-2xl w-full bg-white p-8 rounded-2xl shadow-xl border border-gray-100 sm:p-10"
         initial={{ opacity: 0, y: 30 }}
@@ -136,10 +144,10 @@ const Contact = () => {
       <h1 className="text-3xl sm:text-4xl font-extrabold text-center mb-8">
         Neem Contact Op
       </h1>
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid sm:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
               Voornaam <span className="text-red-500">*</span>
             </label>
             <input
@@ -150,16 +158,16 @@ const Contact = () => {
               onChange={handleChange}
               required
               maxLength={50}
-              className={`w-full mt-1 p-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none ${
+              className={`w-full p-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none ${
                 errors.firstName ? 'border-red-500' : 'border-gray-300'
               }`}
             />
             {errors.firstName && (
-              <p className="mt-1 text-sm text-red-500">{errors.firstName}</p>
+              <p className="mt-1.5 text-sm text-red-500">{errors.firstName}</p>
             )}
           </div>
           <div>
-            <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">
               Naam <span className="text-red-500">*</span>
             </label>
             <input
@@ -170,13 +178,18 @@ const Contact = () => {
               onChange={handleChange}
               required
               maxLength={50}
-              className="w-full mt-1 p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className={`w-full p-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none ${
+                errors.lastName ? 'border-red-500' : 'border-gray-300'
+              }`}
             />
+            {errors.lastName && (
+              <p className="mt-1.5 text-sm text-red-500">{errors.lastName}</p>
+            )}
           </div>
         </div>
 
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
             Email <span className="text-red-500">*</span>
           </label>
           <input
@@ -187,17 +200,17 @@ const Contact = () => {
             onChange={handleChange}
             required
             maxLength={100}
-            className={`w-full mt-1 p-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none ${
+            className={`w-full p-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none ${
               errors.email ? 'border-red-500' : 'border-gray-300'
             }`}
           />
           {errors.email && (
-            <p className="mt-1 text-sm text-red-500">{errors.email}</p>
+            <p className="mt-1.5 text-sm text-red-500">{errors.email}</p>
           )}
         </div>
 
         <div>
-          <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
             Telefoonnummer (optioneel)
           </label>
           <input
@@ -206,17 +219,17 @@ const Contact = () => {
             name="phone"
             value={formData.phone}
             onChange={handleChange}
-            className={`w-full mt-1 p-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none ${
+            className={`w-full p-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none ${
               errors.phone ? 'border-red-500' : 'border-gray-300'
             }`}
           />
           {errors.phone && (
-            <p className="mt-1 text-sm text-red-500">{errors.phone}</p>
+            <p className="mt-1.5 text-sm text-red-500">{errors.phone}</p>
           )}
         </div>
 
         <div>
-          <label htmlFor="message" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
             Bericht <span className="text-red-500">*</span>
           </label>
           <textarea
@@ -224,25 +237,25 @@ const Contact = () => {
             name="message"
             value={formData.message}
             onChange={handleChange}
-            rows={5}
+            rows={4}
             required
-            maxLength={750}
-            className={`w-full mt-1 p-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none ${
+            maxLength={1000}
+            className={`w-full p-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none ${
               errors.message ? 'border-red-500' : 'border-gray-300'
             }`}
           ></textarea>
           {errors.message && (
-            <p className="mt-1 text-sm text-red-500">{errors.message}</p>
+            <p className="mt-1.5 text-sm text-red-500">{errors.message}</p>
           )}
         </div>
 
         {errors.submit && (
-          <p className="text-center text-red-500 mb-4">{errors.submit}</p>
+          <p className="text-sm text-center text-red-500">{errors.submit}</p>
         )}
 
         <button
           type="submit"
-          className="w-full py-3 bg-primary text-white font-semibold rounded-xl hover:bg-primary/80 focus:ring-4 focus:ring-blue-300 transition duration-300"
+          className="w-full py-3 bg-primary text-white font-semibold rounded-xl hover:bg-primary/80 focus:ring-4 focus:ring-blue-300 transition duration-300 mt-2"
         >
           Verzenden
         </button>

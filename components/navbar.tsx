@@ -13,21 +13,31 @@ const Navbar = () => {
   const pathname = usePathname()
 
   useEffect(() => {
-    if (pathname === "/") {
-      const handleScroll = () => {
-        if (window.scrollY > 10) {
-          setScrolled(true)
-        } else {
-          setScrolled(false)
-        }
+    const handleScroll = () => {
+      if (window.scrollY > 10) {
+        setScrolled(true)
+      } else {
+        setScrolled(false)
       }
-
-      window.addEventListener("scroll", handleScroll)
-      return () => window.removeEventListener("scroll", handleScroll)
-    } else {
-      setScrolled(true)
     }
-  }, [pathname])
+
+    // Set initial scroll state
+    if (pathname === "/") {
+      setScrolled(window.scrollY > 10);
+      window.addEventListener("scroll", handleScroll);
+    } else {
+      setScrolled(true);
+    }
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [pathname]);
+
+  // Reset scroll state when navigating to home page
+  useEffect(() => {
+    if (pathname === "/") {
+      setScrolled(window.scrollY > 10);
+    }
+  }, [pathname]);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen)
