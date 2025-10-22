@@ -24,7 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       date: new Date(event.start_time).toLocaleDateString("nl-BE"),
       time: new Date(event.start_time).toLocaleTimeString("nl-BE", { hour: "2-digit", minute: "2-digit" }),
       location: "Jeugdhuis De Choke",
-      image: event.cover?.source || "/images/default-event.jpg",
+      image: event.cover?.source || "Geen afbeelding beschikbaar",
       description: event.description || "Geen beschrijving beschikbaar",
     }))
 
